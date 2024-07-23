@@ -1,6 +1,6 @@
-# config
+# Config
 
-`config` is a configuration management pattern in Shell for Linux users. `base-config` is the instance of `config` that contains files that are most likely to be useful in any Linux instance in the domain(s) a user works in. This `base-config` and the `wayland-config` are customized to myself&mdash;modify to your needs.
+This is a pattern of configuration management in Shell for Linux users. `base-config` is the instance of this pattern that contains domain unspecific files. [`sgy4q4ygs/base-config`](https://github.com/sgy4q4ygs/base-config) and [`sgy4q4ygs/wayland-config`](https://github.com/sgy4q4ygs/wayland-config) are unique to one&mdash;modify to your needs. Note that there are nicer ways to do personal configuration management i.e. this is an experiment.
 
 ## Install a config
 
@@ -8,10 +8,8 @@ Assign `config_repo` to something like `base-config` or `wayland-config` then do
 
 ```shell
 cd
-git clone https://github.com/dl0461/"$config_repo".git
+git clone https://github.com/sgy4q4ygs/"$config_repo".git
 ```
-
-Read `"$config_repo/.config/shell/$config_repo/dependencies"`.
 
 If `config_repo` is not `base-config`
 
@@ -43,9 +41,13 @@ mkdir ~/.config/shell/"$config_repo"
 
 This directory can have these files:
 
-#### `init-more`
+#### `dependencies`
 
-See `.config/shell/base-config/init-more` for an example `init-more`. This kind of script does tasks that should be done before a `zprofile` is sourced.
+This script defines, downloads, and installs dependencies of a config. It is executed by `init`.
+
+#### `init`
+
+This kind of script does tasks that should be done before a `zprofile` is sourced. It can be setup to execute `dependencies` only once or every time `init` is executed.
 
 #### `cmdpatterns`
 
@@ -55,29 +57,17 @@ This file contains newline delimited Python `Lib/re` compatible regular expressi
 
 This file can have `ssh-add` statements in it.
 
-If `cmdpatterns` is used, this file should have this block in it:
-
-```shell
-if [ -f "$CFG/shell/$config_repo/cmdpatterns" ]; then
-    shellhistoryfilter_hook() {
-        shellhistoryfilter.py "$CFG/shell/$config_repo/cmdpatterns"\
-            &> "$XDG_STATE_HOME/zsh-shellhistoryfilter-hook-log"
-    }
-    add-zsh-hook zshexit shellhistoryfilter_hook
-fi
-```
-
 #### `zshrc.sh`
 
 This file contains any tasks that should be executed in `.zshrc`.
 
-### Unique Scripts and Binaries
+### Special Programs
 
 ```shell
 mkdir ~/.local/bin/"$config_repo"
 ```
 
-This directory contains any scripts specfic to `$config_repo`. It will have at least one script:
+This directory contains any programs specfic to `$config_repo`. It will have at least one script:
 
 ```shell
 cat << EOL > ~/.local/bin/"$config_repo/git-$config_repo"
@@ -121,5 +111,5 @@ EOL
 After an `exclude-"$config_repo"` is edited,
 
 ```shell
-init-any-config "$config_repo"
+init-config "$config_repo"
 ```

@@ -1,0 +1,17 @@
+^cd .*&& .*
+^connect-to-wireless-network .*
+^docker.*
+^e (\*\.[a-z0-9_]+ *)+
+^e .*\$\(find .*
+^e \$[A-Za-z0-9_\-/]+.*
+^git.* add \. .*
+^git.* fetch .*
+^git.* log .*
+^git.* status
+^man -k .*
+^nmcli .*
+^pactl .*
+^ps -eo .*
+^sudo nmcli .*
+^sudo wpa_cli .*
+^watch .*
